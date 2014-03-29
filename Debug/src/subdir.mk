@@ -4,15 +4,12 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 CPP_SRCS += \
-../src/2048-semNcurses.cpp \
 ../src/2048.cpp 
 
 OBJS += \
-./src/2048-semNcurses.o \
 ./src/2048.o 
 
 CPP_DEPS += \
-./src/2048-semNcurses.d \
 ./src/2048.d 
 
 

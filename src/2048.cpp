@@ -143,19 +143,20 @@ void loopJogo() {
 		move(MARGEM_TOP + DEZ, MARGEM_LATERAL + QUATRO);
 		printw("Pressione um das setas!");
 		refresh();
-		cin >> tecla;
+		tecla = cin.get();
+		cin.ignore(256,'\r');
 		attron(COLOR_PAIR(1));
 		move(MARGEM_TOP + DEZ, MARGEM_LATERAL + QUATRO);
 		printw("                                     ");
 		attron(COLOR_PAIR(2));
 		refresh();
-		if (tecla == 'a' || tecla == 'A') {
+		if (tecla == 'w' || tecla == 'W') {
 			movimento = moveCima();
-		} else if (tecla == 'b' || tecla == 'B') {
+		} else if (tecla == 's' || tecla == 'S') {
 			movimento = moveBaixo();
-		} else if (tecla == 'c' || tecla == 'C') {
-			movimento = moveDireita();
 		} else if (tecla == 'd' || tecla == 'D') {
+			movimento = moveDireita();
+		} else if (tecla == 'a' || tecla == 'A') {
 			movimento = moveEsquerda();
 		}
 		bool derrota = perdeu();
@@ -240,7 +241,7 @@ bool moveDireita() {
 						matriz[linha][coluna2] += matriz[linha][coluna];
 						somarPontos(matriz[linha][coluna2]);
 						matriz[linha][coluna] = ZERO;
-						coluna = coluna2;
+						coluna = ++coluna2;
 						fezMovimento = true;
 					}
 				}
@@ -285,7 +286,7 @@ bool moveEsquerda() {
 						matriz[linha][coluna2] += matriz[linha][coluna];
 						somarPontos(matriz[linha][coluna2]);
 						matriz[linha][coluna] = ZERO;
-						coluna = coluna2;
+						coluna = --coluna2;
 						fezMovimento = true;
 					}
 				}
@@ -330,7 +331,7 @@ bool moveBaixo() {
 						matriz[linha2][coluna] += matriz[linha2][coluna];
 						somarPontos(matriz[linha2][coluna]);
 						matriz[linha][coluna] = ZERO;
-						linha = linha2;
+						linha = ++linha2;
 						fezMovimento = true;
 					}
 				}
@@ -376,7 +377,7 @@ bool moveCima() {
 						matriz[linha2][coluna] += matriz[linha][coluna];
 						somarPontos(matriz[linha2][coluna]);
 						matriz[linha][coluna] = ZERO;
-						linha = linha2;
+						linha = --linha2;
 						fezMovimento = true;
 					}
 				}
