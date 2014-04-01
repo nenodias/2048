@@ -35,7 +35,7 @@ void printNumero(int numero);
 void debug();
 
 int acrescentarEspaco(int x);
-int somarPontos(int x) {
+void somarPontos(int x) {
 	pontos += x;
 }
 int getRandom();
@@ -46,14 +46,14 @@ void desenhaMatriz();
 
 void loopJogo();
 
-bool moveEsquerda();
-bool moveDireita();
-bool moveCima();
-bool moveBaixo();
+bool moveEsquerda(bool *vitoria);
+bool moveDireita(bool *vitoria);
+bool moveCima(bool *vitoria);
+bool moveBaixo(bool *vitoria);
 
 void novoNumero();
 bool perdeu();
-bool venceu();
+bool venceu(int &x, int &y );
 
 int main() {
 	inicializandoTela();
@@ -150,17 +150,18 @@ void loopJogo() {
 		printw("                                     ");
 		attron(COLOR_PAIR(2));
 		refresh();
+		bool vitoria = false;
 		if (tecla == 'w' || tecla == 'W') {
-			movimento = moveCima();
+			movimento = moveCima(&vitoria);
 		} else if (tecla == 's' || tecla == 'S') {
-			movimento = moveBaixo();
+			movimento = moveBaixo(&vitoria);
 		} else if (tecla == 'd' || tecla == 'D') {
-			movimento = moveDireita();
+			movimento = moveDireita(&vitoria);
 		} else if (tecla == 'a' || tecla == 'A') {
-			movimento = moveEsquerda();
+			movimento = moveEsquerda(&vitoria);
 		}
 		bool derrota = perdeu();
-		bool vitoria = venceu();
+
 		if(movimento && !derrota && !vitoria){
 			novoNumero();
 		}
@@ -223,9 +224,10 @@ int getNumero() {
 int getRandom() {
 	srand(time( NULL));
 	int r = rand() % QUATRO;
+	return r;
 }
 
-bool moveDireita() {
+bool moveDireita(bool *vitoria) {
 	bool fezMovimento = false;
 	for (int linha = ZERO; linha < QUATRO; linha++) {
 		for (int coluna = ZERO; coluna <= TRES; coluna++) {
@@ -252,6 +254,9 @@ bool moveDireita() {
 		int colunaAtual = TRES;
 		for (int coluna = colunaAtual; coluna >= ZERO; coluna--) {
 			if(matriz[linha][coluna] != ZERO){
+				if(!*vitoria){
+					*vitoria = venceu(linha,coluna);
+				}
 				colunaAtual--;
 				continue;
 			}
@@ -270,7 +275,7 @@ bool moveDireita() {
 	return fezMovimento;
 }
 
-bool moveEsquerda() {
+bool moveEsquerda(bool *vitoria) {
 	bool fezMovimento = false;
 	for (int linha = ZERO; linha < QUATRO; linha++) {
 		for (int coluna = TRES; coluna > ZERO; coluna--) {
@@ -298,6 +303,9 @@ bool moveEsquerda() {
 			int colunaAtual = ZERO;
 			for (int coluna = colunaAtual; coluna < QUATRO; coluna++) {
 				if(matriz[linha][coluna] != ZERO){
+					if(!*vitoria){
+						*vitoria = venceu(linha,coluna);
+					}
 					colunaAtual++;
 					continue;
 				}
@@ -315,7 +323,7 @@ bool moveEsquerda() {
 	return fezMovimento;
 }
 
-bool moveBaixo() {
+bool moveBaixo(bool *vitoria) {
 	bool fezMovimento = false;
 	for (int coluna = ZERO; coluna < QUATRO; coluna++) {
 		for (int linha = ZERO; linha < TRES; linha++) {
@@ -343,6 +351,9 @@ bool moveBaixo() {
 				int linhaAtual = TRES;
 				for (int linha = linhaAtual; linha >= ZERO; linha--) {
 					if(matriz[linha][coluna] != ZERO){
+						if(!*vitoria){
+							*vitoria = venceu(linha,coluna);
+						}
 						linhaAtual--;
 						continue;
 					}
@@ -361,7 +372,7 @@ bool moveBaixo() {
 	return fezMovimento;
 }
 
-bool moveCima() {
+bool moveCima(bool *vitoria) {
 	bool fezMovimento = false;
 	for (int coluna = ZERO; coluna < QUATRO; coluna++) {
 		for (int linha = TRES; linha > ZERO; linha--) {
@@ -389,6 +400,9 @@ bool moveCima() {
 					int linhaAtual = ZERO;
 					for (int linha = linhaAtual; linha < QUATRO; linha++) {
 						if(matriz[linha][coluna] != ZERO){
+							if(!*vitoria){
+								*vitoria = venceu(linha,coluna);
+							}
 							linhaAtual++;
 							continue;
 						}
@@ -443,15 +457,8 @@ bool perdeu(){
 	return perdeu;
 }
 
-bool venceu(){
-	for(int i = ZERO; i< QUATRO;i++){
-		for(int j = ZERO; j< QUATRO;j++){
-			if(valorVitoria = matriz[i][j]){
-				return true;
-			}
-		}
-	}
-	return false;
+bool venceu(int &x, int &y ){
+	return (valorVitoria == matriz[x][y]);
 }
 
 
