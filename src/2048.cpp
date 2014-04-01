@@ -444,13 +444,14 @@ bool perdeu(){
 }
 
 bool venceu(){
-	int soma = ZERO;
 	for(int i = ZERO; i< QUATRO;i++){
 		for(int j = ZERO; j< QUATRO;j++){
-			soma += matriz[i][j];
+			if(valorVitoria = matriz[i][j]){
+				return true;
+			}
 		}
 	}
-	return (soma >= valorVitoria);
+	return false;
 }
 
 
